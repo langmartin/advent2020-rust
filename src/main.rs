@@ -1,6 +1,6 @@
 mod d01;
 
 fn main() {
-    let nums = d01::doit();
-    dbg!(nums);
+    dbg!(d01::part1());
+    dbg!(d01::part2());
 }

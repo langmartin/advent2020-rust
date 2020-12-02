@@ -20,10 +20,10 @@ where P: AsRef<Path>, {
     Ok(io::BufReader::new(file).lines())
 }
 
-pub fn doit() -> (i32, i32) {
+pub fn numbers(filename: &str) -> Vec<i32> {
     let mut nums = Vec::new();
 
-    if let Ok(lines) = read_lines("data/d01.txt") {
+    if let Ok(lines) = read_lines(filename) {
 	for line in lines {
 	    if let Ok(s) = line {
 		let n = s.parse::<i32>().unwrap();
@@ -32,13 +32,35 @@ pub fn doit() -> (i32, i32) {
 	}
     }
 
+    return nums;
+}
+
+pub fn part1() -> i32 {
+    let nums = numbers("data/d01.txt");
+
     for n in &nums {
 	for m in &nums {
 	    if n + m  == 2020 {
-		return (*n, *m);
+		return n * m;
 	    }
 	}
     }
 
-    return (-1, -1);
+    return 0;
+}
+
+pub fn part2() -> i32 {
+    let nums = numbers("data/d01.txt");
+
+    for n in &nums {
+	for m in &nums {
+	    for o in &nums {
+		if n + m + o == 2020 {
+		    return n * m * o;
+		}
+	    }
+	}
+    }
+
+    return 0;
 }
