@@ -9,5 +9,5 @@ mod d05;
 
 fn main() {
     dbg!(d05::part1());
-    dbg!(d05::part2());
+    // dbg!(d05::part2());
 }

@@ -1,8 +1,7 @@
 use std::fs::File;
 use std::io::{self, BufRead};
-use regex::Regex;
 use substring::Substring;
-use std::collections::HashSet;
+use std::cmp::max;
 
 pub fn part1() -> usize {
     return partn();
@@ -13,41 +12,48 @@ pub fn part2() -> usize {
 }
 
 fn partn() -> usize {
-    let file = File::open("data/d045.txt").unwrap();
-    let mut buf = io::BufReader::new(file);
+    let file = File::open("data/d05.txt").unwrap();
+    let buf = io::BufReader::new(file);
 
     let mut highest = 0;
+    for line in buf.lines() {
+	if let Ok(line) = line {
+	    let row = rown(&line);
+	    let col = coln(&line);
+	    let id = row * 8 + col;
 
-    loop {
-	let mut line = String::new();
-	if 0 == buf.read_line(&mut line).unwrap() {
-	    return highest;
+	    dbg!(line, row, col, id);
+
+	    highest = max(highest, id);
 	}
-
-	let row = rown(line.substring(0, 8));
-	let col = coln(line.substring(8, 11));
-	
-	
     }
+
+    return highest;
 }
 
-fn rown(specStr: &str) -> usize {
-    let mut row = 0;
-    let mut step = 128;
+fn rown(line: &str) -> usize {
+    return bin(line.substring(0, 6), 128);
+}
 
-    // let mut front = 0;
-    // let mut back = 128;
+fn coln(line: &str) -> usize {
+    return bin(line.substring(7, 9), 8);
+}
 
-    for ch in specStr.chars() {
+fn bin(spec: &str, maximum: usize) -> usize {
+    let mut cursor = 0;
+    let mut step = maximum;
+
+    for ch in spec.chars() {
 	step = step / 2;
+	// dbg!(ch, step);
+	
 	match ch {
-	    'F' => row = row - step,
-	    'B' => row = row + step,
-	    // 'B' => front = front + step,
-	    // 'F' => back = back - step,
+	    'B' | 'R' => cursor = cursor + step,
+	    'F' | 'L' => cursor = if cursor >= step {cursor - step} else {cursor},
 	    _ => {},
 	}
+	// dbg!(ch, step, cursor);
     }
 
-    return row;
+    return cursor;
 }
