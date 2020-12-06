@@ -21,9 +21,7 @@ fn partn() -> usize {
 	    let row = rown(&line);
 	    let col = coln(&line);
 	    let id = row * 8 + col;
-
-	    dbg!(line, row, col, id);
-
+	    // dbg!(line, row, col, id);
 	    highest = max(highest, id);
 	}
     }
@@ -32,28 +30,28 @@ fn partn() -> usize {
 }
 
 fn rown(line: &str) -> usize {
-    return bin(line.substring(0, 6), 128);
+    return bin(line.substring(0, 7), 128);
 }
 
 fn coln(line: &str) -> usize {
-    return bin(line.substring(7, 9), 8);
+    return bin(line.substring(7, 10), 8);
 }
 
 fn bin(spec: &str, maximum: usize) -> usize {
-    let mut cursor = 0;
+    // let mut hi = maximum;
+    let mut lo = 0;
     let mut step = maximum;
 
     for ch in spec.chars() {
 	step = step / 2;
-	// dbg!(ch, step);
-	
+	// dbg!(ch, step, lo, hi);
 	match ch {
-	    'B' | 'R' => cursor = cursor + step,
-	    'F' | 'L' => cursor = if cursor >= step {cursor - step} else {cursor},
+	    'B' | 'R' => lo = lo + step,
+	    // 'F' | 'L' => hi = hi - step,
 	    _ => {},
 	}
-	// dbg!(ch, step, cursor);
     }
 
-    return cursor;
+    // dbg!(spec, maximum, hi, lo);
+    return lo;
 }
